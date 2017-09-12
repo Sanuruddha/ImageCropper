@@ -95,7 +95,7 @@ class BackgroundPane extends JPanel {
     
     public BackgroundPane() throws IOException {
         selectionPane = new SelectionPane();
-        background = ImageIO.read(getClass().getResource("cropper/dog.jpg"));
+        background = ImageIO.read(getClass().getResource("/dog.jpg"));
 
         selectionPane = new SelectionPane();
         setLayout(null);
