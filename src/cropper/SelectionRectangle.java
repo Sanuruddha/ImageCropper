@@ -5,6 +5,7 @@
  */
 package cropper;
 
+import static com.sun.java.accessibility.util.AWTEventMonitor.addComponentListener;
 import static cropper.SelectionPane.getScreenViewableBounds;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -76,8 +77,8 @@ public class SelectionRectangle {
 
         });
 }
-    
-public class BackgroundPane extends JPanel {
+}  
+class BackgroundPane extends JPanel {
 
         private BufferedImage background;
         private Point mouseAnchor;
@@ -142,8 +143,8 @@ public class BackgroundPane extends JPanel {
             g2d.dispose();
         }
 
-    }
 }
+
 class SelectionPane extends JPanel {
 
         private JButton button;
