@@ -55,7 +55,7 @@ class SelectionPane extends JPanel {
         add(label, gbc);
 
         gbc.gridy++;
-        add(button, gbc);
+        //add(button, gbc);
 
         button.addActionListener(new ActionListener() {
             @Override

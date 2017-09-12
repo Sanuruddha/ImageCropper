@@ -54,11 +54,11 @@ public class ControlPane extends JPanel {
             System.out.println(captureSize.toString());
 
             robo.createScreenCapture(captureSize);
-            image=bp.getImage();
-            BufferedImage croppedImage = image.getSubimage(captureSize.x,captureSize.y, captureSize.width,captureSize.height);
-            bp.repaintBackground(croppedImage);
+            image=SelectionRectangle.background;
+            SelectionRectangle.background = image.getSubimage(captureSize.x,captureSize.y, captureSize.width,captureSize.height);
+            
             //ImageIO.write(image,"png",new File(imgAddress));
-            bp.disposePane();
+            SelectionRectangle.restart();
         }
         catch(Exception e){}
         

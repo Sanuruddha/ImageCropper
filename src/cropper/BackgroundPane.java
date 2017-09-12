@@ -24,16 +24,13 @@ import javax.swing.JPanel;
  */
 public class BackgroundPane extends JPanel {
 
-    private BufferedImage background;
+    
     private Point mouseAnchor;
     private Point dragPoint;
-    private int height, width;
+    
     private SelectionPane selectionPane;
 
-    public BufferedImage getImage() {
-        return background;
-
-    }
+    
 
     public SelectionPane getPane() {
         return selectionPane;
@@ -83,14 +80,8 @@ public class BackgroundPane extends JPanel {
     }
     
     public BackgroundPane(JFrame parentFrame) throws IOException {
-
-        background = ImageIO.read(getClass().getResource("/dog.jpg"));
-        height = background.getHeight();
-        width = background.getWidth();
-
-        Dimension d = new Dimension(width, height);
+        Dimension d = new Dimension(SelectionRectangle.background.getWidth(), SelectionRectangle.background.getHeight());
         parentFrame.setPreferredSize(d);
-        parentFrame.setResizable(false);
         
         addSelectionPane();
         
@@ -106,19 +97,11 @@ public class BackgroundPane extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
-        g2d.drawImage(background, 0, 0, this);
+        g2d.drawImage(SelectionRectangle.background, 0, 0, this);
         g2d.dispose();
     }
-
-    public void repaintBackground(Image image) {
-        background = (BufferedImage) image;
-        height = background.getHeight();
-        width = background.getWidth();
-
-        Dimension d = new Dimension(width, height);
-        
-        
-        repaint();
-        
+    
+    public void disposeAll(){
+        remove(selectionPane);
     }
 }
