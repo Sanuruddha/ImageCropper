@@ -11,6 +11,7 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -42,6 +43,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
+import static cropper.SelectionPane.getScreenViewableBounds;
+import static cropper.SelectionPane.getScreenViewableBounds;
+import static cropper.SelectionPane.getScreenViewableBounds;
 
 /**
  *
@@ -51,7 +55,13 @@ public class SelectionRectangle {
 //    public static void main(String[] args) {
 //        new SelectionRectangle();
 //    }
-
+    static JFrame frame = new JFrame("Image Cropper");
+    BackgroundPane bp=null;
+    
+    public static void setWindowSize(Dimension d){
+        frame.setPreferredSize(d);
+    }
+    
     public SelectionRectangle() {
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -61,16 +71,23 @@ public class SelectionRectangle {
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
                 }
 
-                JFrame frame = new JFrame("Test");
+                
                 //frame.setUndecorated(true);
-                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setLayout(new BorderLayout());
+                
                 try {
-                    frame.add(new BackgroundPane());
+                    bp = new BackgroundPane(frame);
                 } catch (IOException ex) {
                     Logger.getLogger(SelectionRectangle.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                frame.add(bp,BorderLayout.CENTER);
+                
+                
+                frame.add(new ControlPane(bp),BorderLayout.PAGE_END);
+                
+                
                 frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
@@ -78,74 +95,9 @@ public class SelectionRectangle {
 
         });
     }
+    
 }
 
-class BackgroundPane extends JPanel {
 
-    private BufferedImage background;
-    private Point mouseAnchor;
-    private Point dragPoint;
-
-    private SelectionPane selectionPane;
-
-    public void addToBG() {
-
-    }
-    
-    
-    public BackgroundPane() throws IOException {
-        selectionPane = new SelectionPane();
-        background = ImageIO.read(getClass().getResource("/dog.jpg"));
-
-        selectionPane = new SelectionPane();
-        setLayout(null);
-        add(selectionPane);
-
-        MouseAdapter adapter = new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                mouseAnchor = e.getPoint();
-                dragPoint = null;
-                selectionPane.setLocation(mouseAnchor);
-                selectionPane.setSize(0, 0);
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                dragPoint = e.getPoint();
-                int width = dragPoint.x - mouseAnchor.x;
-                int height = dragPoint.y - mouseAnchor.y;
-
-                int x = mouseAnchor.x;
-                int y = mouseAnchor.y;
-
-                if (width < 0) {
-                    x = dragPoint.x;
-                    width *= -1;
-                }
-                if (height < 0) {
-                    y = dragPoint.y;
-                    height *= -1;
-                }
-                selectionPane.setBounds(x, y, width, height);
-                selectionPane.revalidate();
-                repaint();
-            }
-
-        };
-        addMouseListener(adapter);
-        addMouseMotionListener(adapter);
-
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.drawImage(background, 0, 0, this);
-        g2d.dispose();
-    }
-
-}
 
 

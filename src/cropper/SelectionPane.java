@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -71,7 +72,8 @@ class SelectionPane extends JPanel {
         });
 
     }
-
+    
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
