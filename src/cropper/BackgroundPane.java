@@ -17,6 +17,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -24,19 +25,16 @@ import javax.swing.JPanel;
  */
 public class BackgroundPane extends JPanel {
 
-    
     private Point mouseAnchor;
     private Point dragPoint;
-    
-    private SelectionPane selectionPane;
 
-    
+    private SelectionPane selectionPane;
 
     public SelectionPane getPane() {
         return selectionPane;
     }
-    
-    public void addSelectionPane(){
+
+    public void addSelectionPane() {
         selectionPane = new SelectionPane();
         setLayout(null);
         add(selectionPane);
@@ -76,15 +74,16 @@ public class BackgroundPane extends JPanel {
         addMouseListener(adapter);
         addMouseMotionListener(adapter);
 
-    
     }
-    
+
     public BackgroundPane(JFrame parentFrame) throws IOException {
         Dimension d = new Dimension(SelectionRectangle.background.getWidth(), SelectionRectangle.background.getHeight());
         parentFrame.setPreferredSize(d);
+        this.setPreferredSize(d);
         
         addSelectionPane();
         
+
     }
 
     public void disposePane() {
@@ -100,8 +99,8 @@ public class BackgroundPane extends JPanel {
         g2d.drawImage(SelectionRectangle.background, 0, 0, this);
         g2d.dispose();
     }
-    
-    public void disposeAll(){
+
+    public void disposeAll() {
         remove(selectionPane);
     }
 }
