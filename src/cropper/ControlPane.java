@@ -115,7 +115,7 @@ public class ControlPane extends JPanel {
         }
         if(flag){
             JFrame successWindow=new JFrame("Successful");
-            successWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            successWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             successWindow.setSize(250,100);
             successWindow.add(new JLabel("Successfully Saved",JLabel.CENTER));
             successWindow.setLocationRelativeTo(null);
