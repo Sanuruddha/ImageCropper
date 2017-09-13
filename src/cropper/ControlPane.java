@@ -95,6 +95,8 @@ public class ControlPane extends JPanel {
         System.out.println(Integer.toString(background.getHeight())+" "+Integer.toString(background.getWidth()));
         Dimension d=new Dimension(background.getWidth(),background.getHeight());
         SelectionRectangle.setWindowSize(d);
+        bp.setPreferredSize(d);
+        bp.revalidate();
         bp.repaint();
 
     }
