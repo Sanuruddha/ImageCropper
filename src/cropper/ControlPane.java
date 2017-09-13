@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -104,10 +105,23 @@ public class ControlPane extends JPanel {
     public void saveImage(BackgroundPane bp, SelectionPane sp, int x1, int y1, int x2, int y2) throws AWTException, IOException, IOException {
         BufferedImage image;
         Robot robo = new Robot();
-        String imgAddress = "C:/Users/shihan/Desktop/new.png";
-
-        image = SelectionRectangle.background;
-        ImageIO.write(image, "png", new File(imgAddress));
+        Boolean flag=false;
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File("C:/Users/shihan/Desktop/"));
+        int returnVal = chooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            image = SelectionRectangle.background;
+            flag=ImageIO.write(image, "png", new File(chooser.getSelectedFile().getAbsolutePath())); 
+        }
+        if(flag){
+            JFrame successWindow=new JFrame("Successful");
+            successWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            successWindow.setSize(250,100);
+            successWindow.add(new JLabel("Successfully Saved",JLabel.CENTER));
+            successWindow.setLocationRelativeTo(null);
+            successWindow.setVisible(true);
+        }
+            
     }
 
     public void cropImage(BackgroundPane bp, SelectionPane sp, int x1, int y1, int x2, int y2) throws AWTException {
