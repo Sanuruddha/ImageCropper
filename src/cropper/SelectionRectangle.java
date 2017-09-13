@@ -38,7 +38,6 @@ public class SelectionRectangle {
     public static JPanel container=null;
     
     public SelectionRectangle() throws IOException {
-        background = ImageIO.read(getClass().getResource("/dog.jpg"));
         init();
     }
 
@@ -61,9 +60,8 @@ public class SelectionRectangle {
     }
 
     public static void init() {
-        height = background.getHeight();
-        width = background.getWidth();
-
+        
+        
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -85,7 +83,7 @@ public class SelectionRectangle {
                 jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
                 frame.getContentPane().add(jScrollPane);
-
+                
                 try {
                     bp = new BackgroundPane(frame);
                 } catch (IOException ex) {

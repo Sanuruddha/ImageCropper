@@ -77,12 +77,17 @@ public class BackgroundPane extends JPanel {
     }
 
     public BackgroundPane(JFrame parentFrame) throws IOException {
-        Dimension d = new Dimension(SelectionRectangle.background.getWidth(), SelectionRectangle.background.getHeight());
-        parentFrame.setPreferredSize(d);
-        this.setPreferredSize(d);
-        
-        addSelectionPane();
-        
+        if (SelectionRectangle.background != null) {
+            Dimension d = new Dimension(SelectionRectangle.background.getWidth(), SelectionRectangle.background.getHeight());
+            parentFrame.setPreferredSize(d);
+            this.setPreferredSize(d);
+            addSelectionPane();
+        } else {
+            Dimension d = new Dimension(500, 500);
+            parentFrame.setPreferredSize(d);
+            this.setPreferredSize(d);
+            addSelectionPane();
+        }
 
     }
 
@@ -94,10 +99,13 @@ public class BackgroundPane extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.drawImage(SelectionRectangle.background, 0, 0, this);
-        g2d.dispose();
+        if (SelectionRectangle.background != null) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.drawImage(SelectionRectangle.background, 0, 0, this);
+            g2d.dispose();
+        }
+
     }
 
     public void disposeAll() {
