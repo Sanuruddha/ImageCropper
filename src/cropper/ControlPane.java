@@ -17,6 +17,7 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -85,12 +86,16 @@ public class ControlPane extends JPanel {
 
     public void openImage(BackgroundPane bp, SelectionPane sp) throws IOException {
         JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter=new FileNameExtensionFilter("Image or PDF", "jpg", "pdf");
+        
+        chooser.setFileFilter(filter);
+        
         chooser.setCurrentDirectory(new File("C:/Users/shihan/Desktop/new.png"));
         int returnVal = chooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             
             System.out.println(chooser.getSelectedFile().getAbsolutePath());
-            background = ImageIO.read(new File(chooser.getSelectedFile().getAbsolutePath()));
+            background = PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
             
         }
         System.out.println(Integer.toString(background.getHeight())+" "+Integer.toString(background.getWidth()));

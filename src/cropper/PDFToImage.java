@@ -3,6 +3,8 @@ package cropper;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
@@ -25,19 +27,11 @@ public class PDFToImage {
     /**
      * private constructor.
      */
-    private PDFToImage() {
-        //static class
+    public PDFToImage() throws IOException {
+        
     }
-
-    /**
-     * Infamous main method.
-     *
-     * @param args Command line arguments, should be one and a reference to a
-     * file.
-     *
-     * @throws Exception If there is an error parsing the document.
-     */
-    public static void main(String[] args) throws Exception {
+    
+    public static BufferedImage converToImage(File file) throws IOException{
         String password = "";
         String pdfFile = null;
         String outputPrefix = null;
@@ -51,43 +45,8 @@ public class PDFToImage {
         } catch (HeadlessException e) {
             resolution = 96;
         }
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals(PASSWORD)) {
-                i++;
-                if (i >= args.length) {
-                    usage();
-                }
-                password = args[i];
-            } else if (args[i].equals(START_PAGE)) {
-                i++;
-                if (i >= args.length) {
-                    usage();
-                }
-                startPage = Integer.parseInt(args[i]);
-            } else if (args[i].equals(END_PAGE)) {
-                i++;
-                if (i >= args.length) {
-                    usage();
-                }
-                endPage = Integer.parseInt(args[i]);
-            } else if (args[i].equals(IMAGE_FORMAT)) {
-                i++;
-                imageFormat = args[i];
-            } else if (args[i].equals(OUTPUT_PREFIX)) {
-                i++;
-                outputPrefix = args[i];
-            } else if (args[i].equals(COLOR)) {
-                i++;
-                color = args[i];
-            } else if (args[i].equals(RESOLUTION)) {
-                i++;
-                resolution = Integer.parseInt(args[i]);
-            } else {
-                if (pdfFile == null) {
-                    pdfFile = args[i];
-                }
-            }
-        }
+        
+        
         if (pdfFile != null) {
             usage();
         } else {
@@ -97,7 +56,7 @@ public class PDFToImage {
 
             PDDocument document = null;
             try {
-                document = PDDocument.load("C:/Users/shihan/Desktop/masterDOC1.pdf");
+                document = PDDocument.load(file.getAbsolutePath());
 
                 //document.print();
                 if (document.isEncrypted()) {
@@ -137,11 +96,9 @@ public class PDFToImage {
                 }
             }
         }
+        return ImageIO.read(new File("C:/Users/shihan/Documents/NetBeansProjects/Cropper/test1.jpg"));
     }
-
-    /**
-     * This will print the usage requirements and exit.
-     */
+    
     private static void usage() {
         System.err.println("Usage: java org.apache.pdfbox.PDFToImage [OPTIONS] <PDF file>\n"
                 + "  -password  <password>          Password to decrypt document\n"
