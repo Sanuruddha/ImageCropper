@@ -147,6 +147,7 @@ public class ControlPane extends JPanel {
             image = SelectionRectangle.background;
             if (!isPdf) {
                 ImageIO.write(image, "png", new File(chooser.getSelectedFile().getAbsolutePath()));
+                
             } else {
                 PDDocument document = new PDDocument();
                 float width = image.getWidth();

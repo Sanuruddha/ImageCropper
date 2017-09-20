@@ -46,6 +46,7 @@ public class BackgroundPane extends JPanel {
                 dragPoint = null;
                 selectionPane.setLocation(mouseAnchor);
                 selectionPane.setSize(0, 0);
+                
             }
 
             @Override
