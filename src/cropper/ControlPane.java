@@ -1,4 +1,3 @@
-
 package cropper;
 
 import static cropper.SelectionRectangle.background;
@@ -13,7 +12,6 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import static java.lang.System.in;
 import java.util.logging.Level;
@@ -148,7 +146,7 @@ public class ControlPane extends JPanel {
             }
             image = SelectionRectangle.background;
             if (!isPdf) {
-                flag = ImageIO.write(image, "png", new File(chooser.getSelectedFile().getAbsolutePath()));
+                ImageIO.write(image, "png", new File(chooser.getSelectedFile().getAbsolutePath()));
             } else {
                 PDDocument document = new PDDocument();
                 float width = image.getWidth();
@@ -166,14 +164,13 @@ public class ControlPane extends JPanel {
             }
 
         }
-        if (flag) {
-            JFrame successWindow = new JFrame("Successful");
-            successWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            successWindow.setSize(250, 100);
-            successWindow.add(new JLabel("Successfully Saved", JLabel.CENTER));
-            successWindow.setLocationRelativeTo(null);
-            successWindow.setVisible(true);
-        }
+
+        JFrame successWindow = new JFrame("Successful");
+        successWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        successWindow.setSize(250, 100);
+        successWindow.add(new JLabel("Successfully Saved", JLabel.CENTER));
+        successWindow.setLocationRelativeTo(null);
+        successWindow.setVisible(true);
 
     }
 
