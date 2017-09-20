@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cropper;
 
 import static cropper.SelectionRectangle.background;
@@ -17,16 +13,22 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import static java.lang.System.in;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.pdfbox.exceptions.COSVisitorException;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 
 /**
  *
@@ -66,6 +68,8 @@ public class ControlPane extends JPanel {
                     Logger.getLogger(ControlPane.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(ControlPane.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (COSVisitorException ex) {
+                    Logger.getLogger(ControlPane.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         };
@@ -85,21 +89,35 @@ public class ControlPane extends JPanel {
     }
 
     public void openImage(BackgroundPane bp, SelectionPane sp) throws IOException {
+        boolean isPdf = false;
+        String fileName;
         JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter filter=new FileNameExtensionFilter("Image or PDF", "jpg", "pdf");
-        
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image or PDF", "jpg", "pdf");
         chooser.setFileFilter(filter);
-        
         chooser.setCurrentDirectory(new File("C:/Users/shihan/Desktop/new.png"));
+
         int returnVal = chooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            
-            System.out.println(chooser.getSelectedFile().getAbsolutePath());
-            background = PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
-            
+            fileName = chooser.getSelectedFile().getName();
+            switch (fileName.substring(fileName.lastIndexOf('.') + 1)) {
+                case "pdf":
+                    isPdf = true;
+                    break;
+                case "jpg":
+                    isPdf = false;
+                    break;
+                default:
+                    break;
+            }
+            System.out.println(fileName.substring(fileName.lastIndexOf('.')));
+            if (isPdf) {
+                background = PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
+            } else {
+                background = ImageIO.read(new File(chooser.getSelectedFile().getAbsolutePath()));
+            }
         }
-        System.out.println(Integer.toString(background.getHeight())+" "+Integer.toString(background.getWidth()));
-        Dimension d=new Dimension(background.getWidth(),background.getHeight());
+        System.out.println(Integer.toString(background.getHeight()) + " " + Integer.toString(background.getWidth()));
+        Dimension d = new Dimension(background.getWidth(), background.getHeight());
         SelectionRectangle.setWindowSize(d);
         bp.setPreferredSize(d);
         bp.revalidate();
@@ -107,26 +125,56 @@ public class ControlPane extends JPanel {
 
     }
 
-    public void saveImage(BackgroundPane bp, SelectionPane sp, int x1, int y1, int x2, int y2) throws AWTException, IOException, IOException {
+    public void saveImage(BackgroundPane bp, SelectionPane sp, int x1, int y1, int x2, int y2) throws AWTException, IOException, IOException, COSVisitorException {
         BufferedImage image;
         Robot robo = new Robot();
-        Boolean flag=false;
+        Boolean flag = false;
+        String fileName;
+        boolean isPdf = false;
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File("C:/Users/shihan/Desktop/"));
         int returnVal = chooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
+            fileName = chooser.getSelectedFile().getName();
+            switch (fileName.substring(fileName.lastIndexOf('.') + 1)) {
+                case "pdf":
+                    isPdf = true;
+                    break;
+                case "jpg":
+                    isPdf = false;
+                    break;
+                default:
+                    break;
+            }
             image = SelectionRectangle.background;
-            flag=ImageIO.write(image, "png", new File(chooser.getSelectedFile().getAbsolutePath())); 
+            if (!isPdf) {
+                flag = ImageIO.write(image, "png", new File(chooser.getSelectedFile().getAbsolutePath()));
+            } else {
+                PDDocument document = new PDDocument();
+                float width = image.getWidth();
+                float height = image.getHeight();
+                PDPage page = new PDPage(new PDRectangle(width, height));
+                document.addPage(page);
+                PDXObjectImage img = new PDJpeg(document, image);
+                PDPageContentStream contentStream = new PDPageContentStream(document, page);
+                contentStream.drawImage(img, 0, 0);
+                contentStream.close();
+                in.close();
+
+                document.save(chooser.getSelectedFile().getAbsolutePath());
+                document.close();
+            }
+
         }
-        if(flag){
-            JFrame successWindow=new JFrame("Successful");
+        if (flag) {
+            JFrame successWindow = new JFrame("Successful");
             successWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            successWindow.setSize(250,100);
-            successWindow.add(new JLabel("Successfully Saved",JLabel.CENTER));
+            successWindow.setSize(250, 100);
+            successWindow.add(new JLabel("Successfully Saved", JLabel.CENTER));
             successWindow.setLocationRelativeTo(null);
             successWindow.setVisible(true);
         }
-            
+
     }
 
     public void cropImage(BackgroundPane bp, SelectionPane sp, int x1, int y1, int x2, int y2) throws AWTException {
