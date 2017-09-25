@@ -44,8 +44,8 @@ class SelectionPane extends JPanel {
     private Point mouseAnchor;
     private Point dragPoint;
     private Point newDragPoint;
-    private double maxX,minX,maxY,minY;
-    
+    private double maxX, minX, maxY, minY;
+
     public SelectionPane() {
         button = new JButton("Close");
         setOpaque(false);
@@ -71,26 +71,51 @@ class SelectionPane extends JPanel {
                 SwingUtilities.getWindowAncestor(SelectionPane.this).dispose();
             }
         });
-        
-        
+
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 label.setText("Rectangle " + getX() + "x" + getY() + "x" + getWidth() + "x" + getHeight());
             }
         });
-        
-        
-        
+
         MouseAdapter adapter;
         adapter = new MouseAdapter() {
-            
-           
-            
             @Override
-            public void mousePressed(MouseEvent e) {
-                
-                
+            public void mouseMoved(MouseEvent e) {
+
+                Edge edge;
+                edge = detectEdge(e);
+
+                if (null == edge) {
+                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                } else {
+                    switch (edge) {
+                        case right:
+                            setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
+                            break;
+                        case left:
+                            setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+                            break;
+                        case bottom:
+                            setCursor(Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR));
+                            break;
+                        case top:
+                            setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+                            break;
+                        case topleft:
+                            setCursor(Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR));
+                        case topright:   
+                            setCursor(Cursor.getPredefinedCursor(Cursor.NE_RESIZE_CURSOR));
+                        case bottomleft:
+                            setCursor(Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR));
+                        case bottomright:
+                            setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
+                        default:
+                            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                            break;
+                    }
+                }
             }
 
 //            @Override
@@ -114,14 +139,12 @@ class SelectionPane extends JPanel {
 //                revalidate();
 //                getParent().repaint();
 //            }
-
         };
         addMouseListener(adapter);
         addMouseMotionListener(adapter);
 
     }
-    
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -164,4 +187,45 @@ class SelectionPane extends JPanel {
         return bounds;
     }
 
+    private Edge detectEdge(MouseEvent e) {
+        Edge edge = null;
+        maxX = getBounds().getMaxX();
+        maxY = getBounds().getMaxY();
+        minX = getBounds().getMinX();
+        minY = getBounds().getMinY();
+        newDragPoint = e.getPoint();
+
+        int x = newDragPoint.x;
+        int y = newDragPoint.y;
+
+        System.out.println(x);
+        System.out.println(y);
+        System.out.println(minX);
+        System.out.println(minY);
+
+        if (0< y && y < 5 &&  5 < x && x < maxX-minX-5) {
+            edge = Edge.top;
+        } else if (maxY-minY-5< y && y < maxY-minY &&  5 < x && x < maxX-minX-5) {
+            edge = Edge.bottom;
+        } else if (maxX-minX - 5 < x && x < maxX-minX  && minY + 5 < y && y < maxY - 5) {
+            edge = Edge.right;
+        } else if (0  < x && x < 5 &&  5 < y && y < maxY-minY-5) {
+            edge = Edge.left;
+        } else if (0 < x && x < 5 && 0 < y && y <  5) {
+            edge = Edge.topleft;
+        } else if (minX - 2 < x && x < minX + 2 && maxY - 2 < y && y < maxY + 2) {
+            edge = Edge.bottomleft;
+        } else if (maxX - 2 < x && x < maxX + 2 && minY - 2 < y && y < minY + 2) {
+            edge = Edge.topright;
+        } else if (maxX - 2 < x && x < maxX + 2 && maxY - 5 < y && y < maxY + 2) {
+            edge = Edge.bottomright;
+        }
+
+        return edge;
+    }
+
+}
+
+enum Edge {
+    left, right, top, bottom, topleft, topright, bottomleft, bottomright;
 }
