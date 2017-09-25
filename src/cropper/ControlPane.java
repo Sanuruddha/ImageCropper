@@ -1,6 +1,6 @@
 package cropper;
 
-import static cropper.SelectionRectangle.background;
+import static cropper.Window.background;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
@@ -116,7 +116,7 @@ public class ControlPane extends JPanel {
         }
         System.out.println(Integer.toString(background.getHeight()) + " " + Integer.toString(background.getWidth()));
         Dimension d = new Dimension(background.getWidth(), background.getHeight());
-        SelectionRectangle.setWindowSize(d);
+        Window.setWindowSize(d);
         bp.setPreferredSize(d);
         bp.revalidate();
         bp.repaint();
@@ -144,7 +144,7 @@ public class ControlPane extends JPanel {
                 default:
                     break;
             }
-            image = SelectionRectangle.background;
+            image = Window.background;
             if (!isPdf) {
                 ImageIO.write(image, "png", new File(chooser.getSelectedFile().getAbsolutePath()));
                 
@@ -185,11 +185,11 @@ public class ControlPane extends JPanel {
             System.out.println(captureSize.toString());
 
             robo.createScreenCapture(captureSize);
-            image = SelectionRectangle.background;
-            SelectionRectangle.background = image.getSubimage(captureSize.x, captureSize.y, captureSize.width, captureSize.height);
+            image = Window.background;
+            Window.background = image.getSubimage(captureSize.x, captureSize.y, captureSize.width, captureSize.height);
 
             //ImageIO.write(image,"png",new File(imgAddress));
-            SelectionRectangle.restart();
+            Window.restart();
         } catch (Exception e) {
         }
 

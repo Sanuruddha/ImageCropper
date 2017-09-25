@@ -7,7 +7,7 @@ public class CropperApp {
  
     public static void main(String[] args) throws IOException {
         
-        new SelectionRectangle();
+        new Window();
     }
     
 }

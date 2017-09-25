@@ -8,16 +8,12 @@ package cropper;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 /**
  *
@@ -78,8 +74,8 @@ public class BackgroundPane extends JPanel {
     }
 
     public BackgroundPane(JFrame parentFrame) throws IOException {
-        if (SelectionRectangle.background != null) {
-            Dimension d = new Dimension(SelectionRectangle.background.getWidth(), SelectionRectangle.background.getHeight());
+        if (Window.background != null) {
+            Dimension d = new Dimension(Window.background.getWidth(), Window.background.getHeight());
             parentFrame.setPreferredSize(d);
             this.setPreferredSize(d);
             addSelectionPane();
@@ -95,15 +91,15 @@ public class BackgroundPane extends JPanel {
     public void disposePane() {
         remove(selectionPane);
         addSelectionPane();
-        SelectionRectangle.frame.add(new ControlPane(this));
+        Window.frame.add(new ControlPane(this));
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        if (SelectionRectangle.background != null) {
+        if (Window.background != null) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g.create();
-            g2d.drawImage(SelectionRectangle.background, 0, 0, this);
+            g2d.drawImage(Window.background, 0, 0, this);
             g2d.dispose();
         }
 

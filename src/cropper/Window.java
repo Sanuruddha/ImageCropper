@@ -8,12 +8,10 @@ package cropper;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,11 +22,11 @@ import javax.swing.UnsupportedLookAndFeelException;
  *
  * @author shihan
  */
-public class SelectionRectangle {
+public class Window {
 //    public static void main(String[] args) {
-//        new SelectionRectangle();
+//        new Window();
 //    }
-
+    
     static JFrame frame = new JFrame("Image Cropper");
     static BackgroundPane bp = null;
     static ControlPane cp = null;
@@ -37,18 +35,8 @@ public class SelectionRectangle {
     public static JScrollPane jScrollPane;
     public static JPanel container=null;
     
-    public SelectionRectangle() throws IOException {
+    public Window() throws IOException {
         init();
-    }
-
-    public static void setWindowSize(Dimension d) {
-        frame.setPreferredSize(d);
-    }
-
-    public static void restart() {
-        disposeAll();
-        init();
-
     }
 
     public static void disposeAll() {
@@ -70,8 +58,6 @@ public class SelectionRectangle {
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
                 }
 
-                //frame.setUndecorated(true);
-                //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setLayout(new BorderLayout());
 
@@ -87,14 +73,12 @@ public class SelectionRectangle {
                 try {
                     bp = new BackgroundPane(frame);
                 } catch (IOException ex) {
-                    Logger.getLogger(SelectionRectangle.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                //frame.add(bp, BorderLayout.CENTER);
-                
                 container.add(bp,BorderLayout.CENTER);
                 
                 cp = new ControlPane(bp);
-
+                
                 frame.add(cp, BorderLayout.PAGE_END);
 
                 frame.pack();
@@ -103,6 +87,16 @@ public class SelectionRectangle {
             }
 
         });
+
+    }
+    
+    public static void setWindowSize(Dimension d) {
+        frame.setPreferredSize(d);
+    }
+    
+    public static void restart() {
+        disposeAll();
+        init();
 
     }
 }
