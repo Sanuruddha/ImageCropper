@@ -84,34 +84,7 @@ class SelectionPane extends JPanel {
         
         MouseAdapter adapter;
         adapter = new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                maxX=getBounds().getMaxX();
-                maxY=getBounds().getMaxY();
-                minX=getBounds().getMinX();
-                minY=getBounds().getMinY();
-                newDragPoint = e.getPoint();
-                
-                if(maxX-minX-20<=newDragPoint.getX()&&newDragPoint.getX()<=maxX-minX){
-                    setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
-                
-                }
-                else if(0<=newDragPoint.getX()&&newDragPoint.getX()<=20){
-                    setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
-                
-                }
-                else if(maxY-minY-20<=newDragPoint.getY()&&newDragPoint.getY()<=maxY-minY){
-                    setCursor(Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR));
-                
-                }
-                else if(0<=newDragPoint.getY()&&newDragPoint.getY()<=20 ){
-                    setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
-                
-                }
-                else{
-                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                }
-            }
+            
            
             
             @Override

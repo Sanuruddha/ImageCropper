@@ -5,6 +5,7 @@
  */
 package cropper;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -25,11 +26,13 @@ public class BackgroundPane extends JPanel {
     private Point dragPoint;
 
     private SelectionPane selectionPane;
+    private Point newDragPoint;
+    private double maxX, minX, maxY, minY;
 
     public SelectionPane getPane() {
         return selectionPane;
     }
-
+    
     public void addSelectionPane() {
         selectionPane = new SelectionPane();
         setLayout(null);
@@ -42,7 +45,34 @@ public class BackgroundPane extends JPanel {
                 dragPoint = null;
                 selectionPane.setLocation(mouseAnchor);
                 selectionPane.setSize(0, 0);
-                
+
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+
+                Edge edge;
+                edge = detectEdge(e);
+
+                if (null == edge) {
+                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                } else switch (edge) {
+                    case right:
+                        setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
+                        break;
+                    case left:
+                        setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+                        break;
+                    case bottom:
+                        setCursor(Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR));
+                        break;
+                    case top:
+                        setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+                        break;
+                    default:
+                        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                        break;
+                }
             }
 
             @Override
@@ -72,6 +102,8 @@ public class BackgroundPane extends JPanel {
         addMouseMotionListener(adapter);
 
     }
+    
+    
 
     public BackgroundPane(JFrame parentFrame) throws IOException {
         if (Window.background != null) {
@@ -108,4 +140,27 @@ public class BackgroundPane extends JPanel {
     public void disposeAll() {
         remove(selectionPane);
     }
+
+    private Edge detectEdge(MouseEvent e) {
+        Edge edge=null;
+        maxX = selectionPane.getBounds().getMaxX();
+        maxY = selectionPane.getBounds().getMaxY();
+        minX = selectionPane.getBounds().getMinX();
+        minY = selectionPane.getBounds().getMinY();
+        newDragPoint = e.getPoint();
+        System.out.print(maxX);
+                System.out.println(maxY);
+                System.out.println(minX);
+                System.out.println(minY);
+        
+        return edge;
+    }
+    
+    
+    
+    
+}
+
+enum Edge {
+    left, right, top, bottom;
 }
