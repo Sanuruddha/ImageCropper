@@ -107,14 +107,13 @@ public class ControlPane extends JPanel {
                 default:
                     break;
             }
-            System.out.println(fileName.substring(fileName.lastIndexOf('.')));
             if (isPdf) {
                 background = PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
             } else {
                 background = ImageIO.read(new File(chooser.getSelectedFile().getAbsolutePath()));
             }
         }
-        System.out.println(Integer.toString(background.getHeight()) + " " + Integer.toString(background.getWidth()));
+        
         Dimension d = new Dimension(background.getWidth(), background.getHeight());
         Window.setWindowSize(d);
         bp.setPreferredSize(d);
@@ -181,8 +180,6 @@ public class ControlPane extends JPanel {
             Robot robo = new Robot();
 
             Rectangle captureSize = sp.getBounds();
-
-            System.out.println(captureSize.toString());
 
             robo.createScreenCapture(captureSize);
             image = Window.background;
