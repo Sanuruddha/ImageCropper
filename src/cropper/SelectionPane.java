@@ -42,12 +42,13 @@ class SelectionPane extends JPanel {
     private JButton button;
     private JLabel label;
     private Point mouseAnchor;
-    private int mouseAnchorX,mouseAnchorY,newDragPointX,newDragPointY;
+    private int mouseAnchorX, mouseAnchorY, newDragPointX, newDragPointY;
     private Point dragPoint;
     private Point newDragPoint;
     private double maxX, minX, maxY, minY;
     boolean isResizing = false;
     Edge resizeEdge;
+
     public SelectionPane() {
         button = new JButton("Close");
         setOpaque(false);
@@ -88,21 +89,21 @@ class SelectionPane extends JPanel {
             public void mousePressed(MouseEvent e) {
                 if (detectEdge(e) != null) {
                     isResizing = true;
-                    resizeEdge=detectEdge(e);
-                    mouseAnchor=e.getPoint();
+                    resizeEdge = detectEdge(e);
+                    mouseAnchor = e.getPoint();
                     mouseAnchorX = e.getPoint().x;
-                    mouseAnchorY=e.getPoint().y;
-                } 
-            }
-            
-            @Override
-            public void mouseReleased(MouseEvent e){
-                if(isResizing){
-                    isResizing=false;
-                    resizeEdge=null;
+                    mouseAnchorY = e.getPoint().y;
                 }
             }
-            
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (isResizing) {
+                    isResizing = false;
+                    resizeEdge = null;
+                }
+            }
+
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (isResizing) {
@@ -113,66 +114,66 @@ class SelectionPane extends JPanel {
                     minX = getBounds().getMinX();
                     minY = getBounds().getMinY();
                     newDragPoint = e.getPoint();
-                    newDragPointX=e.getPoint().x;
-                    newDragPointY=e.getPoint().y;
-                    if (null == resizeEdge) {
-
-                    } else {
+                    newDragPointX = e.getPoint().x;
+                    newDragPointY = e.getPoint().y;
+                    if (null != resizeEdge) {
                         switch (resizeEdge) {
                             case right:
-                                setBounds((int) minX, (int) minY, (int) maxX - (int) minX + ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY );
+                                setBounds((int) minX, (int) minY, (int) maxX - (int) minX + ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY);
                                 revalidate();
                                 getParent().repaint();
-                                mouseAnchor=newDragPoint;
+                                mouseAnchor = newDragPoint;
                                 break;
                             case left:
-                                setBounds((int) minX+ ((int) newDragPoint.x - (int) mouseAnchor.x), (int) minY, (int) maxX - (int) minX - ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY );
+                                setBounds((int) minX + ((int) newDragPoint.x - (int) mouseAnchor.x), (int) minY, (int) maxX - (int) minX - ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY);
                                 revalidate();
                                 getParent().repaint();
-                                newDragPoint=mouseAnchor;
+                                newDragPoint = mouseAnchor;
                                 break;
                             case bottom:
-                                setBounds((int) minX, (int) minY, (int) maxX - (int) minX , (int) maxY - (int) minY + ((int) newDragPoint.y - (int) mouseAnchor.y));
+                                setBounds((int) minX, (int) minY, (int) maxX - (int) minX, (int) maxY - (int) minY + ((int) newDragPoint.y - (int) mouseAnchor.y));
                                 revalidate();
                                 getParent().repaint();
-                                mouseAnchor=newDragPoint;
+                                mouseAnchor = newDragPoint;
                                 break;
                             case top:
-                                setBounds((int) minX, (int) minY+ ((int) newDragPoint.y - (int) mouseAnchor.y), (int) maxX - (int) minX , (int) maxY - (int) minY- ((int) newDragPoint.y - (int) mouseAnchor.y) );
+                                setBounds((int) minX, (int) minY + ((int) newDragPoint.y - (int) mouseAnchor.y), (int) maxX - (int) minX, (int) maxY - (int) minY - ((int) newDragPoint.y - (int) mouseAnchor.y));
                                 revalidate();
                                 getParent().repaint();
-                                newDragPoint=mouseAnchor;
+                                newDragPoint = mouseAnchor;
                                 break;
                             case topleft:
-                                setBounds((int) minX+((int) newDragPoint.x - (int) mouseAnchor.x), (int) minY+((int) newDragPoint.y - (int) mouseAnchor.y), (int) maxX - (int) minX - ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY- ((int) newDragPoint.y - (int) mouseAnchor.y) );
+                                setBounds((int) minX + ((int) newDragPoint.x - (int) mouseAnchor.x), (int) minY + ((int) newDragPoint.y - (int) mouseAnchor.y), (int) maxX - (int) minX - ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY - ((int) newDragPoint.y - (int) mouseAnchor.y));
                                 revalidate();
                                 getParent().repaint();
-                                newDragPoint=mouseAnchor;
+                                newDragPoint = mouseAnchor;
                                 break;
                             case topright:
-                                setBounds((int) minX, (int) minY+((int) newDragPointY - (int) mouseAnchorY), (int) maxX - (int) minX + ((int) newDragPointX - (int) mouseAnchorX), (int) maxY - (int) minY -((int) newDragPointY - (int) mouseAnchorY));
+                                setBounds((int) minX, (int) minY + ((int) newDragPointY - (int) mouseAnchorY), (int) maxX - (int) minX + ((int) newDragPointX - (int) mouseAnchorX), (int) maxY - (int) minY - ((int) newDragPointY - (int) mouseAnchorY));
                                 revalidate();
                                 getParent().repaint();
-                                mouseAnchorX=newDragPointX;
-                                newDragPointY=mouseAnchorY;
+                                mouseAnchorX = newDragPointX;
+                                newDragPointY = mouseAnchorY;
                                 break;
                             case bottomleft:
-                                setBounds((int) minX+((int) newDragPointX - (int) mouseAnchorX), (int) minY, (int) maxX - (int) minX - ((int) newDragPointX - (int) mouseAnchorX), (int) maxY - (int) minY+((int) newDragPointY - (int) mouseAnchorY) );
+                                setBounds((int) minX + ((int) newDragPointX - (int) mouseAnchorX), (int) minY, (int) maxX - (int) minX - ((int) newDragPointX - (int) mouseAnchorX), (int) maxY - (int) minY + ((int) newDragPointY - (int) mouseAnchorY));
                                 revalidate();
                                 getParent().repaint();
-                                mouseAnchorY=newDragPointY;
-                                newDragPointX=mouseAnchorX;
+                                mouseAnchorY = newDragPointY;
+                                newDragPointX = mouseAnchorX;
                                 break;
                             case bottomright:
-                                setBounds((int) minX, (int) minY, (int) maxX - (int) minX + ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY+ ((int) newDragPoint.y - (int) mouseAnchor.y) );
+                                setBounds((int) minX, (int) minY, (int) maxX - (int) minX + ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY + ((int) newDragPoint.y - (int) mouseAnchor.y));
                                 revalidate();
                                 getParent().repaint();
-                                mouseAnchor=newDragPoint;
+                                mouseAnchor = newDragPoint;
                                 break;
                             default:
 
                                 break;
                         }
+                    } else {
+
                     }
                 }
 
@@ -217,7 +218,6 @@ class SelectionPane extends JPanel {
                     }
                 }
             }
-
 
         };
         addMouseListener(adapter);

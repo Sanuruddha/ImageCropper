@@ -44,8 +44,9 @@ public class PDFToImage {
             resolution = Toolkit.getDefaultToolkit().getScreenResolution();
         } catch (HeadlessException e) {
             resolution = 96;
+            System.out.println(e.getMessage());
         }
-        
+        System.out.println(resolution);
         
         if (pdfFile != null) {
             usage();
