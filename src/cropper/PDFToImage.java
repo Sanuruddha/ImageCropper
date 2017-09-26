@@ -44,7 +44,7 @@ public class PDFToImage {
             resolution = Toolkit.getDefaultToolkit().getScreenResolution();
         } catch (HeadlessException e) {
             resolution = 96;
-            System.out.println(e.getMessage());
+            System.out.println("here");
         }
         System.out.println(resolution);
         
@@ -83,7 +83,7 @@ public class PDFToImage {
                 //Make the call
                 PDFImageWriter imageWriter = new PDFImageWriter();
                 boolean success = imageWriter.writeImage(document, imageFormat, password,
-                        startPage, endPage, "test", imageType, resolution);
+                        startPage, endPage, "test", imageType, 256);
                 if (!success) {
                     System.err.println("Error: no writer found for image format '"
                             + imageFormat + "'");
