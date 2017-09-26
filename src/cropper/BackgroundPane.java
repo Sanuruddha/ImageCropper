@@ -49,7 +49,8 @@ public class BackgroundPane extends JPanel {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                dragPoint = e.getPoint();
+                if(Window.background!=null){
+                    dragPoint = e.getPoint();
                 int width = dragPoint.x - mouseAnchor.x;
                 int height = dragPoint.y - mouseAnchor.y;
 
@@ -67,6 +68,8 @@ public class BackgroundPane extends JPanel {
                 selectionPane.setBounds(x, y, width, height);
                 selectionPane.revalidate();
                 repaint();
+                }
+                
             }
 
         };

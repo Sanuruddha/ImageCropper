@@ -94,7 +94,15 @@ class SelectionPane extends JPanel {
                     mouseAnchorY=e.getPoint().y;
                 } 
             }
-
+            
+            @Override
+            public void mouseReleased(MouseEvent e){
+                if(isResizing){
+                    isResizing=false;
+                    resizeEdge=null;
+                }
+            }
+            
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (isResizing) {
