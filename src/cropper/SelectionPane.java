@@ -42,10 +42,12 @@ class SelectionPane extends JPanel {
     private JButton button;
     private JLabel label;
     private Point mouseAnchor;
+    private int mouseAnchorX,mouseAnchorY,newDragPointX,newDragPointY;
     private Point dragPoint;
     private Point newDragPoint;
     private double maxX, minX, maxY, minY;
-
+    boolean isResizing = false;
+    Edge resizeEdge;
     public SelectionPane() {
         button = new JButton("Close");
         setOpaque(false);
@@ -80,13 +82,99 @@ class SelectionPane extends JPanel {
         });
 
         MouseAdapter adapter;
+
         adapter = new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (detectEdge(e) != null) {
+                    isResizing = true;
+                    resizeEdge=detectEdge(e);
+                    mouseAnchor=e.getPoint();
+                    mouseAnchorX = e.getPoint().x;
+                    mouseAnchorY=e.getPoint().y;
+                } 
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (isResizing) {
+                    int x = newDragPoint.x;
+                    int y = newDragPoint.y;
+                    maxX = getBounds().getMaxX();
+                    maxY = getBounds().getMaxY();
+                    minX = getBounds().getMinX();
+                    minY = getBounds().getMinY();
+                    newDragPoint = e.getPoint();
+                    newDragPointX=e.getPoint().x;
+                    newDragPointY=e.getPoint().y;
+                    if (null == resizeEdge) {
+
+                    } else {
+                        switch (resizeEdge) {
+                            case right:
+                                setBounds((int) minX, (int) minY, (int) maxX - (int) minX + ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY );
+                                revalidate();
+                                getParent().repaint();
+                                mouseAnchor=newDragPoint;
+                                break;
+                            case left:
+                                setBounds((int) minX+ ((int) newDragPoint.x - (int) mouseAnchor.x), (int) minY, (int) maxX - (int) minX - ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY );
+                                revalidate();
+                                getParent().repaint();
+                                newDragPoint=mouseAnchor;
+                                break;
+                            case bottom:
+                                setBounds((int) minX, (int) minY, (int) maxX - (int) minX , (int) maxY - (int) minY + ((int) newDragPoint.y - (int) mouseAnchor.y));
+                                revalidate();
+                                getParent().repaint();
+                                mouseAnchor=newDragPoint;
+                                break;
+                            case top:
+                                setBounds((int) minX, (int) minY+ ((int) newDragPoint.y - (int) mouseAnchor.y), (int) maxX - (int) minX , (int) maxY - (int) minY- ((int) newDragPoint.y - (int) mouseAnchor.y) );
+                                revalidate();
+                                getParent().repaint();
+                                newDragPoint=mouseAnchor;
+                                break;
+                            case topleft:
+                                setBounds((int) minX+((int) newDragPoint.x - (int) mouseAnchor.x), (int) minY+((int) newDragPoint.y - (int) mouseAnchor.y), (int) maxX - (int) minX - ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY- ((int) newDragPoint.y - (int) mouseAnchor.y) );
+                                revalidate();
+                                getParent().repaint();
+                                newDragPoint=mouseAnchor;
+                                break;
+                            case topright:
+                                setBounds((int) minX, (int) minY+((int) newDragPointY - (int) mouseAnchorY), (int) maxX - (int) minX + ((int) newDragPointX - (int) mouseAnchorX), (int) maxY - (int) minY -((int) newDragPointY - (int) mouseAnchorY));
+                                revalidate();
+                                getParent().repaint();
+                                mouseAnchorX=newDragPointX;
+                                newDragPointY=mouseAnchorY;
+                                break;
+                            case bottomleft:
+                                setBounds((int) minX+((int) newDragPointX - (int) mouseAnchorX), (int) minY, (int) maxX - (int) minX - ((int) newDragPointX - (int) mouseAnchorX), (int) maxY - (int) minY+((int) newDragPointY - (int) mouseAnchorY) );
+                                revalidate();
+                                getParent().repaint();
+                                mouseAnchorY=newDragPointY;
+                                newDragPointX=mouseAnchorX;
+                                break;
+                            case bottomright:
+                                setBounds((int) minX, (int) minY, (int) maxX - (int) minX + ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY+ ((int) newDragPoint.y - (int) mouseAnchor.y) );
+                                revalidate();
+                                getParent().repaint();
+                                mouseAnchor=newDragPoint;
+                                break;
+                            default:
+
+                                break;
+                        }
+                    }
+                }
+
+            }
+
             @Override
             public void mouseMoved(MouseEvent e) {
 
                 Edge edge;
                 edge = detectEdge(e);
-
                 if (null == edge) {
                     setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 } else {
@@ -105,12 +193,16 @@ class SelectionPane extends JPanel {
                             break;
                         case topleft:
                             setCursor(Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR));
-                        case topright:   
+                            break;
+                        case topright:
                             setCursor(Cursor.getPredefinedCursor(Cursor.NE_RESIZE_CURSOR));
+                            break;
                         case bottomleft:
                             setCursor(Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR));
+                            break;
                         case bottomright:
                             setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
+                            break;
                         default:
                             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                             break;
@@ -118,27 +210,7 @@ class SelectionPane extends JPanel {
                 }
             }
 
-//            @Override
-//            public void mouseDragged(MouseEvent e) {
-//                dragPoint = e.getPoint();
-//                int width = dragPoint.x - mouseAnchor.x;
-//                int height = dragPoint.y - mouseAnchor.y;
-//
-//                int x = mouseAnchor.x;
-//                int y = mouseAnchor.y;
-//
-//                if (width < 0) {
-//                    x = dragPoint.x;
-//                    width *= -1;
-//                }
-//                if (height < 0) {
-//                    y = dragPoint.y;
-//                    height *= -1;
-//                }
-//                setBounds(x, y, width, height);
-//                revalidate();
-//                getParent().repaint();
-//            }
+
         };
         addMouseListener(adapter);
         addMouseMotionListener(adapter);
@@ -198,26 +270,25 @@ class SelectionPane extends JPanel {
         int x = newDragPoint.x;
         int y = newDragPoint.y;
 
-        System.out.println(x);
-        System.out.println(y);
-        System.out.println(minX);
-        System.out.println(minY);
-
-        if (0< y && y < 5 &&  5 < x && x < maxX-minX-5) {
+//        System.out.println(x);
+//        System.out.println(y);
+//        System.out.println(minX);
+//        System.out.println(minY);
+        if (0 < y && y < 5 && 5 < x && x < maxX - minX - 5) {
             edge = Edge.top;
-        } else if (maxY-minY-5< y && y < maxY-minY &&  5 < x && x < maxX-minX-5) {
+        } else if (maxY - minY - 5 < y && y < maxY - minY && 5 < x && x < maxX - minX - 5) {
             edge = Edge.bottom;
-        } else if (maxX-minX - 5 < x && x < maxX-minX  && minY + 5 < y && y < maxY - 5) {
+        } else if (maxX - minX - 5 < x && x < maxX - minX && 5 < y && y < maxY - minY - 5) {
             edge = Edge.right;
-        } else if (0  < x && x < 5 &&  5 < y && y < maxY-minY-5) {
+        } else if (0 < x && x < 5 && 5 < y && y < maxY - minY - 5) {
             edge = Edge.left;
-        } else if (0 < x && x < 5 && 0 < y && y <  5) {
+        } else if (0 < x && x < 5 && 0 < y && y < 5) {
             edge = Edge.topleft;
-        } else if (minX - 2 < x && x < minX + 2 && maxY - 2 < y && y < maxY + 2) {
+        } else if (0 < x && x < 5 && maxY - minY - 5 < y && y < maxY - minY) {
             edge = Edge.bottomleft;
-        } else if (maxX - 2 < x && x < maxX + 2 && minY - 2 < y && y < minY + 2) {
+        } else if (maxX - minX - 5 < x && x < maxX - minX && 0 < y && y < 5) {
             edge = Edge.topright;
-        } else if (maxX - 2 < x && x < maxX + 2 && maxY - 5 < y && y < maxY + 2) {
+        } else if (maxX - minX - 5 < x && x < maxX - minX && maxY - minY - 5 < y && y < maxY - minY) {
             edge = Edge.bottomright;
         }
 
