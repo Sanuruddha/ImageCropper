@@ -47,6 +47,7 @@ class SelectionPane extends JPanel {
     private Point newDragPoint;
     private double maxX, minX, maxY, minY;
     boolean isResizing = false;
+    boolean isDragging = false;
     Edge resizeEdge;
 
     public SelectionPane() {
@@ -93,6 +94,9 @@ class SelectionPane extends JPanel {
                     mouseAnchor = e.getPoint();
                     mouseAnchorX = e.getPoint().x;
                     mouseAnchorY = e.getPoint().y;
+                } else {
+                    isDragging = true;
+                    System.out.println("drag");
                 }
             }
 
@@ -101,21 +105,24 @@ class SelectionPane extends JPanel {
                 if (isResizing) {
                     isResizing = false;
                     resizeEdge = null;
+                    isDragging = false;
                 }
             }
 
             @Override
             public void mouseDragged(MouseEvent e) {
+                int x = newDragPoint.x;
+                int y = newDragPoint.y;
+                maxX = getBounds().getMaxX();
+                maxY = getBounds().getMaxY();
+                minX = getBounds().getMinX();
+                minY = getBounds().getMinY();
+                newDragPoint = e.getPoint();
+                newDragPointX = e.getPoint().x;
+                newDragPointY = e.getPoint().y;
+
                 if (isResizing) {
-                    int x = newDragPoint.x;
-                    int y = newDragPoint.y;
-                    maxX = getBounds().getMaxX();
-                    maxY = getBounds().getMaxY();
-                    minX = getBounds().getMinX();
-                    minY = getBounds().getMinY();
-                    newDragPoint = e.getPoint();
-                    newDragPointX = e.getPoint().x;
-                    newDragPointY = e.getPoint().y;
+
                     if (null != resizeEdge) {
                         switch (resizeEdge) {
                             case right:
@@ -172,9 +179,14 @@ class SelectionPane extends JPanel {
 
                                 break;
                         }
-                    } else {
+                    } else{
 
                     }
+                } else if (isDragging) {
+                    setBounds((int) minX + ((int) newDragPoint.x - (int) mouseAnchor.x), (int) minY + ((int) newDragPoint.y - (int) mouseAnchor.y), (int) maxX - (int) minX + ((int) newDragPoint.x - (int) mouseAnchor.x), (int) maxY - (int) minY + ((int) newDragPoint.y - (int) mouseAnchor.y));
+                    revalidate();
+                    getParent().repaint();
+                    newDragPoint = mouseAnchor;
                 }
 
             }

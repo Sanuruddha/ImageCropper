@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,7 +28,8 @@ public class BackgroundPane extends JPanel {
     private SelectionPane selectionPane;
     private Point newDragPoint;
     private double maxX, minX, maxY, minY;
-
+    private int rotation;
+    private boolean isZooming;
     public SelectionPane getPane() {
         return selectionPane;
     }
@@ -38,6 +40,12 @@ public class BackgroundPane extends JPanel {
         add(selectionPane);
 
         MouseAdapter adapter = new MouseAdapter() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e){
+                
+            }
+            
+            
             @Override
             public void mousePressed(MouseEvent e) {
                 mouseAnchor = e.getPoint();
