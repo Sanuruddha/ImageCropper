@@ -83,7 +83,7 @@ public class PDFToImage {
                 //Make the call
                 PDFImageWriter imageWriter = new PDFImageWriter();
                 boolean success = imageWriter.writeImage(document, imageFormat, password,
-                        startPage, endPage, "test", imageType, 256);
+                        startPage, endPage, "test", imageType, 1024);
                 if (!success) {
                     System.err.println("Error: no writer found for image format '"
                             + imageFormat + "'");
