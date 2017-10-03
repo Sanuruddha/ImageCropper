@@ -5,17 +5,11 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
-import org.apache.pdfbox.exceptions.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFImageWriter;
 
-
-
 public class PDFToImage {
-
     private static final String PASSWORD = "-password";
     private static final String START_PAGE = "-startPage";
     private static final String END_PAGE = "-endPage";
@@ -35,7 +29,7 @@ public class PDFToImage {
         String password = "";
         String pdfFile = null;
         String outputPrefix = null;
-        String imageFormat = "jpg";
+        String imageFormat = "png";
         int startPage = 1;
         int endPage = Integer.MAX_VALUE;
         String color = "rgb";
@@ -83,7 +77,7 @@ public class PDFToImage {
                 //Make the call
                 PDFImageWriter imageWriter = new PDFImageWriter();
                 boolean success = imageWriter.writeImage(document, imageFormat, password,
-                        startPage, endPage, "test", imageType, 1024);
+                        startPage, endPage, "test", imageType, 256);
                 if (!success) {
                     System.err.println("Error: no writer found for image format '"
                             + imageFormat + "'");
@@ -97,7 +91,7 @@ public class PDFToImage {
                 }
             }
         }
-        return ImageIO.read(new File("C:/Users/shihan/Documents/NetBeansProjects/Cropper/test1.jpg"));
+        return ImageIO.read(new File("C:/Users/shihan/Documents/NetBeansProjects/Cropper/test1.png"));
     }
     
     private static void usage() {
