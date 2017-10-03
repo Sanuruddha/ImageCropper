@@ -18,9 +18,6 @@ public class PDFToImage {
     private static final String COLOR = "-color";
     private static final String RESOLUTION = "-resolution";
 
-    /**
-     * private constructor.
-     */
     public PDFToImage() throws IOException {
         
     }
