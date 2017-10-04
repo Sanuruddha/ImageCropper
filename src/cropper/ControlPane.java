@@ -27,6 +27,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
+import org.jpedal.exception.PdfException;
 
 /**
  *
@@ -80,13 +81,15 @@ public class ControlPane extends JPanel {
                     openImage(bp, sp);
                 } catch (IOException ex) {
                     Logger.getLogger(ControlPane.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (PdfException ex) {
+                    Logger.getLogger(ControlPane.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         };
         open.addMouseListener(adapter2);
     }
 
-    public void openImage(BackgroundPane bp, SelectionPane sp) throws IOException {
+    public void openImage(BackgroundPane bp, SelectionPane sp) throws IOException, PdfException {
         boolean isPdf = false;
         String fileName;
         JFileChooser chooser = new JFileChooser();
@@ -108,7 +111,8 @@ public class ControlPane extends JPanel {
                     break;
             }
             if (isPdf) {
-                background = PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
+                //background = PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
+                background=NewClass.convert(new File(chooser.getSelectedFile().getAbsolutePath()));
             } else {
                 background = ImageIO.read(new File(chooser.getSelectedFile().getAbsolutePath()));
             }
