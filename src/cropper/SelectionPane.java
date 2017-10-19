@@ -94,7 +94,9 @@ class SelectionPane extends JPanel {
                     mouseAnchorY = e.getPoint().y;
                 } else {
                     isDragging = true;
-                    System.out.println("drag");
+                    mouseAnchor = e.getPoint();
+                    mouseAnchorX = e.getPoint().x;
+                    mouseAnchorY = e.getPoint().y;
                 }
             }
 
