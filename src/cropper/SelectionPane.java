@@ -222,6 +222,9 @@ class SelectionPane extends JPanel {
                         case bottomright:
                             setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
                             break;
+                        case middle:
+                            setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+                            break;
                         default:
                             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                             break;
@@ -308,6 +311,8 @@ class SelectionPane extends JPanel {
             edge = Edge.topright;
         } else if (maxX - minX - 5 < x && x < maxX - minX && maxY - minY - 5 < y && y < maxY - minY) {
             edge = Edge.bottomright;
+        } else if ((maxX-minX)/2-10 < x && x < (maxX-minX)/2+10 && (maxY-minY)/2-10 < y && y < (maxY-minY)/2+10) {
+            edge = Edge.middle;
         }
 
         return edge;
@@ -316,5 +321,5 @@ class SelectionPane extends JPanel {
 }
 
 enum Edge {
-    left, right, top, bottom, topleft, topright, bottomleft, bottomright;
+    left, right, top, bottom, topleft, topright, bottomleft, bottomright,middle;
 }
