@@ -47,10 +47,10 @@ class SelectionPane extends JPanel {
     boolean isResizing = false;
     boolean isDragging = false;
     Edge resizeEdge;
-
+//constructor
     public SelectionPane() {
-        button = new JButton("Close");
         setOpaque(false);
+        //jLabel that shows the size of the Selection Pane
         label = new JLabel("Rectangle");
         label.setBorder(new EmptyBorder(4, 4, 4, 4));
         label.setForeground(Color.WHITE);
@@ -62,15 +62,8 @@ class SelectionPane extends JPanel {
         add(label, gbc);
 
         gbc.gridy++;
-        //add(button, gbc);
 
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.getWindowAncestor(SelectionPane.this).dispose();
-            }
-        });
-
+        
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -81,6 +74,7 @@ class SelectionPane extends JPanel {
         MouseAdapter adapter;
 
         adapter = new MouseAdapter() {
+            //detects the dragging action and saving the anchor position
             @Override
             public void mousePressed(MouseEvent e) {
                 if (detectEdge(e) != null) {
@@ -95,7 +89,7 @@ class SelectionPane extends JPanel {
                     
                 }
             }
-
+            
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (isResizing) {
@@ -115,7 +109,7 @@ class SelectionPane extends JPanel {
                 newDragPoint = e.getPoint();
                 newDragPointX = e.getPoint().x;
                 newDragPointY = e.getPoint().y;
-
+                //when resizing create the new bounds for the jPanel and repaint
                 if (isResizing) {
 
                     if (null != resizeEdge) {
@@ -180,7 +174,7 @@ class SelectionPane extends JPanel {
                 } 
 
             }
-
+            //change cursor when hovered over edges
             @Override
             public void mouseMoved(MouseEvent e) {
 
@@ -226,7 +220,8 @@ class SelectionPane extends JPanel {
         addMouseMotionListener(adapter);
 
     }
-
+    
+    //Selection Pane draw
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -268,7 +263,7 @@ class SelectionPane extends JPanel {
         }
         return bounds;
     }
-
+    //Detect when hovered over an edge
     private Edge detectEdge(MouseEvent e) {
         Edge edge = null;
         maxX = getBounds().getMaxX();
@@ -280,10 +275,7 @@ class SelectionPane extends JPanel {
         int x = newDragPoint.x;
         int y = newDragPoint.y;
 
-//        System.out.println(x);
-//        System.out.println(y);
-//        System.out.println(minX);
-//        System.out.println(minY);
+
         if (0 < y && y < 5 && 5 < x && x < maxX - minX - 5) {
             edge = Edge.top;
         } else if (maxY - minY - 5 < y && y < maxY - minY && 5 < x && x < maxX - minX - 5) {
@@ -300,8 +292,7 @@ class SelectionPane extends JPanel {
             edge = Edge.topright;
         } else if (maxX - minX - 5 < x && x < maxX - minX && maxY - minY - 5 < y && y < maxY - minY) {
             edge = Edge.bottomright;
-        } 
-
+        }
         return edge;
     }
 

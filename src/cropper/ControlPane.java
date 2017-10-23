@@ -29,15 +29,13 @@ import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import org.jpedal.exception.PdfException;
 
-/**
- *
- * @author Lock'
- */
+
 public class ControlPane extends JPanel {
 
     private JButton cropButton, saveasButton, open;
     private int x1, x2, y1, y2;
-
+    
+    //costructor
     public ControlPane(BackgroundPane bp) {
         cropButton = new JButton("Crop");
         saveasButton = new JButton("Save");
