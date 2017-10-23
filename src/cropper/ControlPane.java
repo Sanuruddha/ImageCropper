@@ -112,7 +112,7 @@ public class ControlPane extends JPanel {
             }
             if (isPdf) {
                 //background = PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
-                background=NewClass.convert(new File(chooser.getSelectedFile().getAbsolutePath()));
+                background=PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
             } else {
                 background = ImageIO.read(new File(chooser.getSelectedFile().getAbsolutePath()));
             }

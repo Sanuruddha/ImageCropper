@@ -31,19 +31,10 @@ public class Window {
     public Window() throws IOException {
         init();
     }
-//dispose all components
-
-    public static void disposeAll() {
-        bp.disposeAll();
-        frame.remove(bp);
-        frame.remove(cp);
-        frame.getContentPane().remove(jScrollPane);
-
-    }
-
+    
+    //creating the jFrame
     
     public static void init() {
-        
         
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -65,10 +56,13 @@ public class Window {
 
                 jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
                 jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
+                
+               
                 frame.getContentPane().add(jScrollPane);
-
+                
+                
                 try {
+                    //BackgroundPane jPanel
                     bp = new BackgroundPane(frame);
                 } catch (IOException ex) {
                     Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,7 +70,7 @@ public class Window {
                 
                 //scrollable background pane
                 container.add(bp, BorderLayout.CENTER);
-
+                //ControlPane jPanel
                 cp = new ControlPane(bp);
 
                 frame.add(cp, BorderLayout.PAGE_END);
@@ -98,6 +92,16 @@ public class Window {
     public static void restart() {
         disposeAll();
         init();
+
+    }
+    
+    //dispose all components
+
+    public static void disposeAll() {
+        bp.disposeAll();
+        frame.remove(bp);
+        frame.remove(cp);
+        frame.getContentPane().remove(jScrollPane);
 
     }
 }

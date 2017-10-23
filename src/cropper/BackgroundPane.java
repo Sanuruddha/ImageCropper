@@ -17,10 +17,7 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/**
- *
- * @author Lock'
- */
+
 public class BackgroundPane extends JPanel {
 
     private Point mouseAnchor;
@@ -30,21 +27,38 @@ public class BackgroundPane extends JPanel {
     private double maxX, minX, maxY, minY;
     private int rotation;
     private boolean isZooming;
+    
+    //constructor
+    public BackgroundPane(JFrame parentFrame) throws IOException {
+        if (Window.background != null) {
+            Dimension d = new Dimension(Window.background.getWidth(), Window.background.getHeight());
+            //adjust the parent frame window size according to the size of the opened image
+            parentFrame.setPreferredSize(d);
+            this.setPreferredSize(d);
+            addSelectionPane();
+        } else {
+            //if no opened image set to default size
+            Dimension d = new Dimension(500, 500);
+            parentFrame.setPreferredSize(d);
+            this.setPreferredSize(d);
+            addSelectionPane();
+        }
+
+    }
+    
+    //returns the reference to child jPanel SelectionPane
     public SelectionPane getPane() {
         return selectionPane;
     }
-
+    
+    //adds new child jPanel SelectionPane
     public void addSelectionPane() {
         selectionPane = new SelectionPane();
         setLayout(null);
         add(selectionPane);
-
+        
         MouseAdapter adapter = new MouseAdapter() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e){
-                
-            }
-            
+            //create the anchor position when clicked
             
             @Override
             public void mousePressed(MouseEvent e) {
@@ -54,7 +68,8 @@ public class BackgroundPane extends JPanel {
                 selectionPane.setSize(0, 0);
 
             }
-
+            //when dragged creates the bounds using anchor and dragged points and draw the selectionpane
+            
             @Override
             public void mouseDragged(MouseEvent e) {
                 if(Window.background!=null){
@@ -85,27 +100,13 @@ public class BackgroundPane extends JPanel {
         addMouseMotionListener(adapter);
 
     }
-
-    public BackgroundPane(JFrame parentFrame) throws IOException {
-        if (Window.background != null) {
-            Dimension d = new Dimension(Window.background.getWidth(), Window.background.getHeight());
-            parentFrame.setPreferredSize(d);
-            this.setPreferredSize(d);
-            addSelectionPane();
-        } else {
-            Dimension d = new Dimension(500, 500);
-            parentFrame.setPreferredSize(d);
-            this.setPreferredSize(d);
-            addSelectionPane();
-        }
-
-    }
-
-    public void disposePane() {
-        remove(selectionPane);
-        addSelectionPane();
-        Window.frame.add(new ControlPane(this));
-    }
+    
+    
+//    public void disposePane() {
+//        remove(selectionPane);
+//        addSelectionPane();
+//        Window.frame.add(new ControlPane(this));
+//    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -117,12 +118,10 @@ public class BackgroundPane extends JPanel {
         }
 
     }
-
+    
+    //remove the child jPanel Selection
     public void disposeAll() {
         remove(selectionPane);
     }
-
-    
-
 }
 
