@@ -58,8 +58,8 @@ public class BackgroundPane extends JPanel {
         add(selectionPane);
         
         MouseAdapter adapter = new MouseAdapter() {
-            //create the anchor position when clicked
             
+            //create the anchor position when clicked
             @Override
             public void mousePressed(MouseEvent e) {
                 mouseAnchor = e.getPoint();
@@ -68,8 +68,8 @@ public class BackgroundPane extends JPanel {
                 selectionPane.setSize(0, 0);
 
             }
-            //when dragged creates the bounds using anchor and dragged points and draw the selectionpane
             
+            //when dragged creates the bounds using anchor and dragged points and draw the selectionpane
             @Override
             public void mouseDragged(MouseEvent e) {
                 if(Window.background!=null){

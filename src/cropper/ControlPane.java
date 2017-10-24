@@ -7,7 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.AWTException;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
@@ -17,6 +19,7 @@ import static java.lang.System.in;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -32,13 +35,17 @@ import org.jpedal.exception.PdfException;
 
 public class ControlPane extends JPanel {
 
-    private JButton cropButton, saveasButton, open;
-    
+    private JButton cropButton, saveasButton, open,zoomIn,zoomOut;
+    //private Icon zoomI,zoomO;
     //constructor
     public ControlPane(BackgroundPane bp) {
+        
         cropButton = new JButton("Crop");
         saveasButton = new JButton("Save");
         open = new JButton("Open");
+        
+        zoomIn=new JButton("zoomI");
+        zoomOut=new JButton("zoomO");
         this.add(cropButton);
         this.add(saveasButton);
         this.add(open);
