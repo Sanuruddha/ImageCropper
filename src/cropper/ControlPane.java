@@ -10,8 +10,12 @@ import java.awt.AWTException;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Robot;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -32,26 +36,47 @@ import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import org.jpedal.exception.PdfException;
 
-
 public class ControlPane extends JPanel {
 
-    private JButton cropButton, saveasButton, open,zoomIn,zoomOut;
+    private JButton cropButton, saveasButton, open, zoomIn, zoomOut;
+
     //private Icon zoomI,zoomO;
     //constructor
     public ControlPane(BackgroundPane bp) {
-        
+
         cropButton = new JButton("Crop");
         saveasButton = new JButton("Save");
         open = new JButton("Open");
-        
-        zoomIn=new JButton("zoomI");
-        zoomOut=new JButton("zoomO");
-        this.add(cropButton);
-        this.add(saveasButton);
-        this.add(open);
+
+        zoomIn = new JButton("Zoom In");
+        zoomOut = new JButton("Zoom Out");
+        add(cropButton);
+        add(saveasButton);
+        add(open);
+        add(zoomIn);
+        add(zoomOut);
         SelectionPane sp = bp.getPane();
+
+        MouseAdapter ZIadapter = new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                zoomInImage(bp, sp);
+            }
+        };
+        zoomIn.addMouseListener(ZIadapter);
+
+        MouseAdapter ZOadapter = new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                zoomOutImage(bp, sp);
+            }
+        };
+        zoomOut.addMouseListener(ZOadapter);
+
         MouseAdapter adapter = new MouseAdapter() {
-            
+
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
@@ -93,9 +118,9 @@ public class ControlPane extends JPanel {
         };
         open.addMouseListener(adapter2);
     }
-    
+
     //render the image file selected by chooser onto the background pane 
-    public void openImage(BackgroundPane bp) throws IOException, PdfException {
+    private void openImage(BackgroundPane bp) throws IOException, PdfException {
         boolean isPdf = false;
         String fileName;
         JFileChooser chooser = new JFileChooser();
@@ -118,34 +143,33 @@ public class ControlPane extends JPanel {
             }
             if (isPdf) {
                 //background = PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
-                background=PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
+                background = PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
             } else {
                 background = ImageIO.read(new File(chooser.getSelectedFile().getAbsolutePath()));
             }
         }
         Dimension d;
-        if(background!=null){
-           d = new Dimension(background.getWidth(), background.getHeight());
+        if (background != null) {
+            d = new Dimension(background.getWidth(), background.getHeight());
+        } else {
+            d = new Dimension(500, 500);
         }
-        else{
-            d=new Dimension(500,500);
-        }
-        
+
         Window.setWindowSize(d);
         bp.setPreferredSize(d);
         bp.revalidate();
         bp.repaint();
 
     }
-    
+
     //crop the image selected by the rectangle
-    public void cropImage(BackgroundPane bp, SelectionPane sp) throws AWTException {
+    private void cropImage(BackgroundPane bp, SelectionPane sp) throws AWTException {
         BufferedImage image = null;
         try {
             Robot robo = new Robot();
 
             Rectangle captureSize = sp.getBounds();
-            
+
             robo.createScreenCapture(captureSize);
             image = Window.background;
             Window.background = image.getSubimage(captureSize.x, captureSize.y, captureSize.width, captureSize.height);
@@ -156,9 +180,9 @@ public class ControlPane extends JPanel {
         }
 
     }
-    
+
     //save the current image
-    public void saveImage(BackgroundPane bp, SelectionPane sp) throws AWTException, IOException, IOException, COSVisitorException {
+    private void saveImage(BackgroundPane bp, SelectionPane sp) throws AWTException, IOException, IOException, COSVisitorException {
         BufferedImage image;
         Robot robo = new Robot();
         Boolean flag = false;
@@ -182,7 +206,7 @@ public class ControlPane extends JPanel {
             image = Window.background;
             if (!isPdf) {
                 ImageIO.write(image, "png", new File(chooser.getSelectedFile().getAbsolutePath()));
-                
+
             } else {
                 PDDocument document = new PDDocument();
                 float width = image.getWidth();
@@ -207,6 +231,29 @@ public class ControlPane extends JPanel {
         successWindow.add(new JLabel("Successfully Saved", JLabel.CENTER));
         successWindow.setLocationRelativeTo(null);
         successWindow.setVisible(true);
+
+    }
+
+    private void zoomInImage(BackgroundPane bp, SelectionPane sp) {
+        BufferedImage image = Window.background;
+        int currentWidth, currentHeight, newWidth, newHeight;
+        if (image != null) {
+            currentWidth = image.getWidth();
+            currentHeight = image.getHeight();
+            newWidth = (currentWidth * 10 / 100) + currentWidth;
+            newHeight = (currentHeight * 10 / 100) + currentHeight;
+
+            AffineTransform af = new AffineTransform();
+            af.scale(1.1, 1.1);
+
+            AffineTransformOp operation = new AffineTransformOp(af, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+            image = operation.filter(background, null);
+            background=image;
+            Window.restart();
+        }
+    }
+
+    private void zoomOutImage(BackgroundPane bp, SelectionPane sp) {
 
     }
 

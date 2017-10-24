@@ -32,8 +32,8 @@ public class BackgroundPane extends JPanel {
     public BackgroundPane(JFrame parentFrame) throws IOException {
         if (Window.background != null) {
             Dimension d = new Dimension(Window.background.getWidth(), Window.background.getHeight());
+            
             //adjust the parent frame window size according to the size of the opened image
-            parentFrame.setPreferredSize(d);
             this.setPreferredSize(d);
             addSelectionPane();
         } else {
