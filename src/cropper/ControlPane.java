@@ -116,8 +116,14 @@ public class ControlPane extends JPanel {
                 background = ImageIO.read(new File(chooser.getSelectedFile().getAbsolutePath()));
             }
         }
+        Dimension d;
+        if(background!=null){
+           d = new Dimension(background.getWidth(), background.getHeight());
+        }
+        else{
+            d=new Dimension(500,500);
+        }
         
-        Dimension d = new Dimension(background.getWidth(), background.getHeight());
         Window.setWindowSize(d);
         bp.setPreferredSize(d);
         bp.revalidate();
