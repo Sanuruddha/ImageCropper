@@ -33,9 +33,8 @@ import org.jpedal.exception.PdfException;
 public class ControlPane extends JPanel {
 
     private JButton cropButton, saveasButton, open;
-    private int x1, x2, y1, y2;
     
-    //costructor
+    //constructor
     public ControlPane(BackgroundPane bp) {
         cropButton = new JButton("Crop");
         saveasButton = new JButton("Save");
@@ -45,10 +44,11 @@ public class ControlPane extends JPanel {
         this.add(open);
         SelectionPane sp = bp.getPane();
         MouseAdapter adapter = new MouseAdapter() {
+            
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
-                    cropImage(bp, sp, x1, y1, x2, y2);
+                    cropImage(bp, sp);
                 } catch (AWTException ex) {
                     Logger.getLogger(ControlPane.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -60,7 +60,7 @@ public class ControlPane extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
-                    saveImage(bp, sp, x1, y1, x2, y2);
+                    saveImage(bp, sp);
                 } catch (AWTException ex) {
                     Logger.getLogger(ControlPane.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
@@ -76,7 +76,7 @@ public class ControlPane extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
-                    openImage(bp, sp);
+                    openImage(bp);
                 } catch (IOException ex) {
                     Logger.getLogger(ControlPane.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (PdfException ex) {
@@ -86,8 +86,9 @@ public class ControlPane extends JPanel {
         };
         open.addMouseListener(adapter2);
     }
-
-    public void openImage(BackgroundPane bp, SelectionPane sp) throws IOException, PdfException {
+    
+    //render the image file selected by chooser onto the background pane 
+    public void openImage(BackgroundPane bp) throws IOException, PdfException {
         boolean isPdf = false;
         String fileName;
         JFileChooser chooser = new JFileChooser();
@@ -123,8 +124,28 @@ public class ControlPane extends JPanel {
         bp.repaint();
 
     }
+    
+    //crop the image selected by the rectangle
+    public void cropImage(BackgroundPane bp, SelectionPane sp) throws AWTException {
+        BufferedImage image = null;
+        try {
+            Robot robo = new Robot();
 
-    public void saveImage(BackgroundPane bp, SelectionPane sp, int x1, int y1, int x2, int y2) throws AWTException, IOException, IOException, COSVisitorException {
+            Rectangle captureSize = sp.getBounds();
+            
+            robo.createScreenCapture(captureSize);
+            image = Window.background;
+            Window.background = image.getSubimage(captureSize.x, captureSize.y, captureSize.width, captureSize.height);
+
+            //ImageIO.write(image,"png",new File(imgAddress));
+            Window.restart();
+        } catch (Exception e) {
+        }
+
+    }
+    
+    //save the current image
+    public void saveImage(BackgroundPane bp, SelectionPane sp) throws AWTException, IOException, IOException, COSVisitorException {
         BufferedImage image;
         Robot robo = new Robot();
         Boolean flag = false;
@@ -173,24 +194,6 @@ public class ControlPane extends JPanel {
         successWindow.add(new JLabel("Successfully Saved", JLabel.CENTER));
         successWindow.setLocationRelativeTo(null);
         successWindow.setVisible(true);
-
-    }
-
-    public void cropImage(BackgroundPane bp, SelectionPane sp, int x1, int y1, int x2, int y2) throws AWTException {
-        BufferedImage image = null;
-        try {
-            Robot robo = new Robot();
-
-            Rectangle captureSize = sp.getBounds();
-
-            robo.createScreenCapture(captureSize);
-            image = Window.background;
-            Window.background = image.getSubimage(captureSize.x, captureSize.y, captureSize.width, captureSize.height);
-
-            //ImageIO.write(image,"png",new File(imgAddress));
-            Window.restart();
-        } catch (Exception e) {
-        }
 
     }
 
