@@ -92,7 +92,6 @@ public class BackgroundPane extends JPanel {
                 selectionPane.revalidate();
                 repaint();
                 }
-                
             }
 
         };
@@ -100,13 +99,6 @@ public class BackgroundPane extends JPanel {
         addMouseMotionListener(adapter);
 
     }
-    
-    
-//    public void disposePane() {
-//        remove(selectionPane);
-//        addSelectionPane();
-//        Window.frame.add(new ControlPane(this));
-//    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -116,7 +108,6 @@ public class BackgroundPane extends JPanel {
             g2d.drawImage(Window.background, 0, 0, this);
             g2d.dispose();
         }
-
     }
     
     //remove the child jPanel Selection
