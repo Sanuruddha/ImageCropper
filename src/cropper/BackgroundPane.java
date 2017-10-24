@@ -97,7 +97,6 @@ public class BackgroundPane extends JPanel {
         };
         addMouseListener(adapter);
         addMouseMotionListener(adapter);
-
     }
 
     @Override
