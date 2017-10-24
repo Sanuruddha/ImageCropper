@@ -23,10 +23,7 @@ public class BackgroundPane extends JPanel {
     private Point mouseAnchor;
     private Point dragPoint;
     private SelectionPane selectionPane;
-    private Point newDragPoint;
-    private double maxX, minX, maxY, minY;
-    private int rotation;
-    private boolean isZooming;
+    
     
     //constructor
     public BackgroundPane(JFrame parentFrame) throws IOException {
@@ -39,7 +36,7 @@ public class BackgroundPane extends JPanel {
         } else {
             //if no opened image set to default size
             Dimension d = new Dimension(500, 500);
-            parentFrame.setPreferredSize(d);
+            
             this.setPreferredSize(d);
             addSelectionPane();
         }

@@ -37,11 +37,9 @@ import javax.swing.border.EmptyBorder;
  */
 class SelectionPane extends JPanel {
 
-    private JButton button;
     private JLabel label;
     private Point mouseAnchor;
     private int mouseAnchorX, mouseAnchorY, newDragPointX, newDragPointY;
-    private Point dragPoint;
     private Point newDragPoint;
     private double maxX, minX, maxY, minY;
     boolean isResizing = false;

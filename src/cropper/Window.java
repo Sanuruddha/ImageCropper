@@ -24,7 +24,6 @@ public class Window {
     static BackgroundPane bp = null;
     static ControlPane cp = null;
     public static BufferedImage background,originalImage;
-    static private int height, width;
     public static JScrollPane jScrollPane;
     public static JPanel container = null;
     public static int zoomLevel;
@@ -61,7 +60,7 @@ public class Window {
                
                 frame.getContentPane().add(jScrollPane);
                 
-                
+                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 try {
                     //BackgroundPane jPanel
                     bp = new BackgroundPane(frame);
@@ -84,16 +83,11 @@ public class Window {
         });
 
     }
-
-    public static void setWindowSize(Dimension d) {
-        frame.setPreferredSize(d);
-    }
-    
     //dispose all and reinit
     public static void restart() {
         disposeAll();
         init();
-
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     
     //dispose all components

@@ -157,8 +157,6 @@ public class ControlPane extends JPanel {
         } else {
             d = new Dimension(500, 500);
         }
-
-        Window.setWindowSize(d);
         bp.setPreferredSize(d);
         bp.revalidate();
         bp.repaint();
