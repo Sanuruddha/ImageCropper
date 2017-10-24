@@ -23,10 +23,11 @@ public class Window {
     static JFrame frame = new JFrame("Image Cropper");
     static BackgroundPane bp = null;
     static ControlPane cp = null;
-    public static BufferedImage background;
+    public static BufferedImage background,originalImage;
     static private int height, width;
     public static JScrollPane jScrollPane;
     public static JPanel container = null;
+    public static int zoomLevel;
 
     public Window() throws IOException {
         init();

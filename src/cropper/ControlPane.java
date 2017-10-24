@@ -61,7 +61,7 @@ public class ControlPane extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                zoomInImage(bp, sp);
+                zoomInImage();
             }
         };
         zoomIn.addMouseListener(ZIadapter);
@@ -70,7 +70,7 @@ public class ControlPane extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                zoomOutImage(bp, sp);
+                zoomOutImage();
             }
         };
         zoomOut.addMouseListener(ZOadapter);
@@ -144,9 +144,12 @@ public class ControlPane extends JPanel {
             if (isPdf) {
                 //background = PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
                 background = PDFToImage.converToImage(new File(chooser.getSelectedFile().getAbsolutePath()));
+                Window.originalImage = background;
             } else {
                 background = ImageIO.read(new File(chooser.getSelectedFile().getAbsolutePath()));
+                Window.originalImage = background;
             }
+            Window.zoomLevel = 0;
         }
         Dimension d;
         if (background != null) {
@@ -234,27 +237,36 @@ public class ControlPane extends JPanel {
 
     }
 
-    private void zoomInImage(BackgroundPane bp, SelectionPane sp) {
+    private void zoomInImage() {
+        if(Window.zoomLevel<=8)
+            Window.zoomLevel += 1;
         BufferedImage image = Window.background;
-        int currentWidth, currentHeight, newWidth, newHeight;
         if (image != null) {
-            currentWidth = image.getWidth();
-            currentHeight = image.getHeight();
-            newWidth = (currentWidth * 10 / 100) + currentWidth;
-            newHeight = (currentHeight * 10 / 100) + currentHeight;
 
             AffineTransform af = new AffineTransform();
-            af.scale(1.1, 1.1);
+            af.scale(1 + (Window.zoomLevel * 0.1), 1 + (Window.zoomLevel * 0.1));
 
             AffineTransformOp operation = new AffineTransformOp(af, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-            image = operation.filter(background, null);
-            background=image;
+            image = operation.filter(Window.originalImage, null);
+            background = image;
             Window.restart();
         }
     }
 
-    private void zoomOutImage(BackgroundPane bp, SelectionPane sp) {
+    private void zoomOutImage() {
+        if(Window.zoomLevel>=-8)
+            Window.zoomLevel -= 1;
+        BufferedImage image = Window.background;
+        if (image != null) {
 
+            AffineTransform af = new AffineTransform();
+            af.scale(1 + (Window.zoomLevel * 0.1), 1 + (Window.zoomLevel * 0.1));
+
+            AffineTransformOp operation = new AffineTransformOp(af, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+            image = operation.filter(Window.originalImage, null);
+            background = image;
+            Window.restart();
+        }
     }
 
 }
