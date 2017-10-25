@@ -61,7 +61,7 @@ public class ControlPane extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                zoomInImage();
+                zoomInImage(bp);
             }
         };
         zoomIn.addMouseListener(ZIadapter);
@@ -70,7 +70,7 @@ public class ControlPane extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                zoomOutImage();
+                zoomOutImage(bp);
             }
         };
         zoomOut.addMouseListener(ZOadapter);
@@ -174,8 +174,9 @@ public class ControlPane extends JPanel {
             robo.createScreenCapture(captureSize);
             image = Window.background;
             Window.background = image.getSubimage(captureSize.x, captureSize.y, captureSize.width, captureSize.height);
-
+            Window.originalImage=Window.background;
             //ImageIO.write(image,"png",new File(imgAddress));
+            Window.zoomLevel=0;
             Window.restart();
         } catch (Exception e) {
         }
@@ -235,8 +236,8 @@ public class ControlPane extends JPanel {
 
     }
 
-    private void zoomInImage() {
-        if(Window.zoomLevel<=8)
+    private void zoomInImage(BackgroundPane bp) {
+        if(Window.zoomLevel<=15)
             Window.zoomLevel += 1;
         BufferedImage image = Window.background;
         if (image != null) {
@@ -251,7 +252,7 @@ public class ControlPane extends JPanel {
         }
     }
 
-    private void zoomOutImage() {
+    private void zoomOutImage(BackgroundPane bp) {
         if(Window.zoomLevel>=-8)
             Window.zoomLevel -= 1;
         BufferedImage image = Window.background;

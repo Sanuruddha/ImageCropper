@@ -17,45 +17,38 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-
 public class BackgroundPane extends JPanel {
 
     private Point mouseAnchor;
     private Point dragPoint;
     private SelectionPane selectionPane;
-    
-    
+
     //constructor
     public BackgroundPane(JFrame parentFrame) throws IOException {
-        if (Window.background != null) {
-            Dimension d = new Dimension(Window.background.getWidth(), Window.background.getHeight());
+        Dimension d;
+        if(Window.background!=null)
+            d=new Dimension(Window.background.getWidth(),Window.background.getHeight());
+        else
+            d=new Dimension(parentFrame.getSize());
             
-            //adjust the parent frame window size according to the size of the opened image
-            this.setPreferredSize(d);
-            addSelectionPane();
-        } else {
-            //if no opened image set to default size
-            Dimension d = new Dimension(500, 500);
-            
-            this.setPreferredSize(d);
-            addSelectionPane();
-        }
+        addSelectionPane();
+        setPreferredSize(d);
 
     }
-    
+
     //returns the reference to child jPanel SelectionPane
     public SelectionPane getPane() {
         return selectionPane;
     }
-    
+
     //adds new child jPanel SelectionPane
     public void addSelectionPane() {
         selectionPane = new SelectionPane();
         setLayout(null);
         add(selectionPane);
-        
+
         MouseAdapter adapter = new MouseAdapter() {
-            
+
             //create the anchor position when clicked
             @Override
             public void mousePressed(MouseEvent e) {
@@ -65,29 +58,29 @@ public class BackgroundPane extends JPanel {
                 selectionPane.setSize(0, 0);
 
             }
-            
+
             //when dragged creates the bounds using anchor and dragged points and draw the selectionpane
             @Override
             public void mouseDragged(MouseEvent e) {
-                if(Window.background!=null){
+                if (Window.background != null) {
                     dragPoint = e.getPoint();
-                int width = dragPoint.x - mouseAnchor.x;
-                int height = dragPoint.y - mouseAnchor.y;
+                    int width = dragPoint.x - mouseAnchor.x;
+                    int height = dragPoint.y - mouseAnchor.y;
 
-                int x = mouseAnchor.x;
-                int y = mouseAnchor.y;
+                    int x = mouseAnchor.x;
+                    int y = mouseAnchor.y;
 
-                if (width < 0) {
-                    x = dragPoint.x;
-                    width *= -1;
-                }
-                if (height < 0) {
-                    y = dragPoint.y;
-                    height *= -1;
-                }
-                selectionPane.setBounds(x, y, width, height);
-                selectionPane.revalidate();
-                repaint();
+                    if (width < 0) {
+                        x = dragPoint.x;
+                        width *= -1;
+                    }
+                    if (height < 0) {
+                        y = dragPoint.y;
+                        height *= -1;
+                    }
+                    selectionPane.setBounds(x, y, width, height);
+                    selectionPane.revalidate();
+                    repaint();
                 }
             }
 
@@ -105,10 +98,9 @@ public class BackgroundPane extends JPanel {
             g2d.dispose();
         }
     }
-    
+
     //remove the child jPanel Selection
     public void disposeAll() {
         remove(selectionPane);
     }
 }
-

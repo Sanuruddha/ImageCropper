@@ -60,7 +60,7 @@ public class Window {
                
                 frame.getContentPane().add(jScrollPane);
                 
-                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                
                 try {
                     //BackgroundPane jPanel
                     bp = new BackgroundPane(frame);
@@ -78,6 +78,7 @@ public class Window {
                 frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
+                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             }
 
         });
@@ -87,7 +88,6 @@ public class Window {
     public static void restart() {
         disposeAll();
         init();
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     
     //dispose all components
