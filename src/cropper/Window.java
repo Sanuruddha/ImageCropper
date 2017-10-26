@@ -6,7 +6,6 @@
 package cropper;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -23,19 +22,19 @@ public class Window {
     static JFrame frame = new JFrame("Image Cropper");
     static BackgroundPane bp = null;
     static ControlPane cp = null;
-    public static BufferedImage background,originalImage;
+    public static BufferedImage background, originalImage;
     public static JScrollPane jScrollPane;
     public static JPanel container = null;
     public static int zoomLevel;
 
     public Window() throws IOException {
         init();
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
-    
+
     //creating the jFrame
-    
     public static void init() {
-        
+
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -46,28 +45,24 @@ public class Window {
                 //main frame 
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setLayout(new BorderLayout());
-                
+
                 //jscroll container
-                
                 container = new JPanel();
-                
-                
+
                 jScrollPane = new JScrollPane(container);
 
                 jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
                 jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-                
-               
+
                 frame.getContentPane().add(jScrollPane);
-                
-                
+
                 try {
                     //BackgroundPane jPanel
                     bp = new BackgroundPane(frame);
                 } catch (IOException ex) {
                     Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
                 //scrollable background pane
                 container.add(bp, BorderLayout.CENTER);
                 //ControlPane jPanel
@@ -80,18 +75,18 @@ public class Window {
                 frame.setVisible(true);
                 frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             }
-
         });
 
     }
+
     //dispose all and reinit
     public static void restart() {
         disposeAll();
         init();
-    }
-    
-    //dispose all components
 
+    }
+
+    //dispose all components
     public static void disposeAll() {
         bp.disposeAll();
         frame.remove(bp);
